@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qss/white.css</file>
+        <file>qss/black.css</file>
+        <file>qss/error_box.css</file>
+        <file>qss/input_box.css</file>
+        <file>qss/warning_box.css</file>
+
+        <file>icons/way_editor.ico</file>
+        <file>icons/new_file.ico</file>
+        <file>icons/open.ico</file>
+        <file>icons/save.ico</file>
+        <file>icons/remove.ico</file>
+        <file>icons/error.ico</file>
+        <file>icons/input_form.ico</file>
+        <file>icons/warning.ico</file>
+
+        <file>texts/from_developers.txt</file>
+        <file>texts/help.txt</file>
+    </qresource>
+</RCC>
