@@ -1,0 +1,24 @@
+QMessageBox {
+    background-color: #ff0f0f;
+    color: #FFEEEE;
+    font-size: 20px;
+    font: "Arial"; /* Жирный шрифт */
+    font-weight: bold;
+    alignment: AlignCenter; /* Выравнивание по центру */
+    padding: 1px;
+    border: 3px solid #F0C000;
+}
+
+QPushButton {
+    background-color: #357ABD;
+    color: #FFEEEE;
+    font: bold 14px;
+    border-radius: 10px;
+    border-style: outset;
+    border: 1px solid #00BFFF;
+    padding: 10px;
+}
+
+QPushButton:hover{
+    background-color: #7ABDFF;
+}

@@ -1,0 +1,124 @@
+QMenuBar {
+    background-color: #0a0a0a; /* Цвет фона */
+    color: #f0f8ff; /* Цвет текста */
+    border: 1px solid #f0f8ff;
+    font-size: 14px; /* Размер шрифта */
+    padding: 5px; /* Отступы */
+}
+
+QMenuBar::item {
+    spacing: 20px; /* Расстояние между пунктами меню */
+    padding: 5px 10px; /* Отступы изображения */
+}
+
+QMenuBar::item:selected {
+    background-color: #282A2E; /* Цвет фона при наведении */
+}
+
+QMenu {
+    background-color: #1D1F21; /* Цвет фона меню */
+    color: #D5D8D6; /* Цвет текста меню */
+    border: 1px solid #373B41; /* Граница меню */
+}
+
+QMenu::item {
+    background-color: #151719;
+    padding: 10px; /* Отступы для элементов меню */
+}
+
+QMenu::item:selected {
+    background-color: #6E6E6E; /* Цвет фона при наведении на элемент меню */
+    color: #FFFFFF; /* Цвет текста при наведении на элемент меню */
+}
+
+QMainWindow {
+    background-color: #2b1520; /* Цвет фона главного окна */
+}
+
+QPushButton {
+    background-color: #4A90E2; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    font-size: 14px; /* Размер шрифта */
+    border: 1px solid #357ABD; /* Цвет границы кнопки */
+    border-radius: 5px; /* Скругление углов кнопки */
+    padding: 10px; /* Отступы внутри кнопки */
+}
+
+QPushButton:hover {
+    background-color: #357ABD; /* Цвет фона при наведении */
+}
+
+QLineEdit {
+    background-color: #2B2B2B; /* Цвет фона поля ввода */
+    color: #C5C8C6; /* Цвет текста */
+    border: 1px solid #4A90E2; /* Цвет границы поля ввода */
+    border-radius: 3px; /* Скругление углов поля ввода */
+    padding: 5px; /* Отступы внутри поля ввода */
+}
+
+QLabel {
+    color: #FFFFFF; /* Цвет текста */
+    font-size: 16px; /* Размер шрифта */
+}
+
+QToolButton {
+    background-color: transparent; /* Прозрачный фон */
+    border: none; /* Без границы */
+}
+
+QToolButton:hover {
+    background-color: #3D3D3D; /* Цвет фона при наведении */
+}
+
+/* QTextEdit */
+QTextEdit {
+    background-color: #333333; /* Темный фон */
+    color: #FFFFFF; /* Белый текст */
+    font-size: 16px;
+    border: 1px solid #202424; /* Темно-серая рамка */
+    padding: 5px; /* Отступы */
+}
+
+QTextEdit#start_massage {
+    background-color: #333333; /* Темный фон */
+    color: #EEEEEE; /* Белый текст */
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #202424; /* Темно-серая рамка */
+    padding: 10px; /* Отступы */
+}
+
+QTextEdit#input_area:focus {
+    background-color: #202020; /* Темный фон */
+    color: #FFFFFF; /* Белый текст */
+    font-size: 16px;
+    border: 2px solid #505454; /* Темно-серая рамка */
+    padding: 5px; /* Отступы */
+}
+
+/* QTabWidget */
+QTabWidget {
+    background-color: #202020; /* Темно-серый фон */
+    border: 2px solid #202424;
+}
+
+QTabBar {
+    background-color: #202020; /* Фон вкладок */
+    border: none; 
+}
+
+QTabBar::tab {
+    background-color: #202020; /* Фон отдельной вкладки */
+    color: #FFFFFF; /* Цвет текста */
+    padding: 10px;
+    margin: 5px;
+}
+
+QTabBar::tab:selected {
+    background-color: #4A4A4A; /* Цвет активной вкладки */
+    font-weight: bold;
+}
+
+QTabBar::tab:!selected {
+    background-color: #303030; /* Цвет неактивной вкладки */
+}

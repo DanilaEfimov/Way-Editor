@@ -1,0 +1,77 @@
+/* Стиль для QDialog */
+QDialog {
+    background-color: #ffe0e0;  /* Светлый розово-красный фон */
+    border-radius: 10px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #f0a0a0; /* Рамка с красным оттенком */
+}
+
+/* Стиль для QLineEdit */
+QLineEdit {
+    background-color: #ffffff;
+    border: 2px solid #e0a0a0;  /* Светло-красная рамка */
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+QLineEdit:focus {
+    border-color: #f44336;  /* Красная рамка при фокусе */
+    background-color: #e5e5e5; /* Светлый фон при фокусе */
+}
+
+QLineEdit:hover {
+    border-color: #ff6666;  /* Более яркая рамка при наведении */
+}
+
+QLineEdit:disabled {
+    background-color: #e0e0e0;
+    border-color: #d0d0d0;
+    color: #777777;
+}
+
+QLineEdit::placeholder {
+    color: #e0a0a0;  /* Розовато-красный цвет для placeholder */
+    font-style: italic;
+}
+
+
+/* Стиль для QPushButton */
+QPushButton {
+    background-color: #ff5722;  /* Рыжий фон */
+    color: white;
+    border: 2px solid #ff5722;  /* Рыжая рамка */
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #e64a19;  /* Темно-рыжий фон при наведении */
+    border-color: #e64a19;  /* Темно-рыжая рамка */
+}
+
+QPushButton:pressed {
+    background-color: #d84315;  /* Еще более темный рыжий при нажатии */
+    border-color: #d84315;  /* Тот же цвет для рамки */
+}
+
+/* Стиль для QLabel */
+QLabel {
+    color: #c62828;  /* Красный цвет текста */
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+QLabel[bold="true"] {
+    font-weight: bold;
+}
+
+QLabel[italic="true"] {
+    font-style: italic;
+}
