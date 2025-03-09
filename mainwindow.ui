@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>440</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="central">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="general_layout">
+      <item>
+       <widget class="QTabWidget" name="files_tab">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>Tab 1</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QTextEdit" name="start_massage">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_2">
+         <attribute name="title">
+          <string>Tab 2</string>
+         </attribute>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="input_area"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>440</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="new_file"/>
+    <addaction name="open"/>
+    <addaction name="save"/>
+    <addaction name="remove"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="black_theme"/>
+    <addaction name="white_theme"/>
+    <addaction name="right_mode"/>
+    <addaction name="left_mode"/>
+   </widget>
+   <widget class="QMenu" name="menuConsole">
+    <property name="title">
+     <string>Console</string>
+    </property>
+    <addaction name="help"/>
+    <addaction name="history"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuConsole"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionnew_file">
+   <property name="text">
+    <string>new file</string>
+   </property>
+  </action>
+  <action name="actionopen">
+   <property name="text">
+    <string>open</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>save</string>
+   </property>
+  </action>
+  <action name="actionmove">
+   <property name="text">
+    <string>move</string>
+   </property>
+  </action>
+  <action name="actionblack_theme">
+   <property name="text">
+    <string>black theme</string>
+   </property>
+  </action>
+  <action name="actionwhite_theme">
+   <property name="text">
+    <string>white theme</string>
+   </property>
+  </action>
+  <action name="actionright_mode">
+   <property name="text">
+    <string>right mode</string>
+   </property>
+  </action>
+  <action name="actionleft_mode">
+   <property name="text">
+    <string>left mode</string>
+   </property>
+  </action>
+  <action name="actionhelp">
+   <property name="text">
+    <string>help</string>
+   </property>
+  </action>
+  <action name="new_file">
+   <property name="text">
+    <string>new file</string>
+   </property>
+  </action>
+  <action name="open">
+   <property name="text">
+    <string>open</string>
+   </property>
+  </action>
+  <action name="save">
+   <property name="text">
+    <string>save</string>
+   </property>
+  </action>
+  <action name="remove">
+   <property name="text">
+    <string>remove</string>
+   </property>
+  </action>
+  <action name="black_theme">
+   <property name="text">
+    <string>black theme</string>
+   </property>
+  </action>
+  <action name="white_theme">
+   <property name="text">
+    <string>white theme</string>
+   </property>
+  </action>
+  <action name="right_mode">
+   <property name="text">
+    <string>right mode</string>
+   </property>
+  </action>
+  <action name="left_mode">
+   <property name="text">
+    <string>left mode</string>
+   </property>
+  </action>
+  <action name="help">
+   <property name="text">
+    <string>help</string>
+   </property>
+  </action>
+  <action name="history">
+   <property name="text">
+    <string>history</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
