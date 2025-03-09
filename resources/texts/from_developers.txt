@@ -1,0 +1,12 @@
+Hello, Way Editor!
+
+This framework provides tools for working with mathematical graphs.
+Here You can create, read, update and delete Your files.
+Graph able be performed like matrix, edge list or adject-list.
+For start choose menu 'file' -> 'new file' and find .mat/.el/.vl file
+or turn to 'file' -> 'open' and choose own existing graph file!
+
+Source code and more about developing at WarerCode github:
+https://github.com/DanilaEfimov/Way-editor
+
+Good work!
