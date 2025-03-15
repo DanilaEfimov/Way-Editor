@@ -3,6 +3,21 @@
 DirGraph::DirGraph() : Graph()
 {}
 
+DirGraph::DirGraph(int V, bool **mat)
+{
+
+}
+
+DirGraph::DirGraph(const edge_list &el)
+{
+
+}
+
+DirGraph::DirGraph(const adj_list &vl)
+{
+
+}
+
 DirGraph::~DirGraph()
 {
 
@@ -26,6 +41,11 @@ void DirGraph::eraseV(int v)
 void DirGraph::eraseE(int from, int to)
 {
 
+}
+
+int DirGraph::type() const
+{
+    return graphTypes::dirgraph;
 }
 
 const QString &DirGraph::show() const

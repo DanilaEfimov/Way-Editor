@@ -20,6 +20,8 @@ public:
     virtual void eraseV(int v) override;
     virtual void eraseE(int from, int to) override;
 
+    virtual int type() const override;
+
     virtual const QString& show() const override;
 };
 

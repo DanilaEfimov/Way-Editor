@@ -31,6 +31,8 @@ public:
     int getE() const;
     bool isConected(int from, int to) const;
 
+    virtual int type() const = 0;
+
     virtual const QString& show() const = 0;
 
 };

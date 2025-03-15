@@ -99,6 +99,11 @@ void UDirGraph::eraseE(int from, int to)
     }
 }
 
+int UDirGraph::type() const
+{
+    return graphTypes::udirgraph;
+}
+
 const QString &UDirGraph::show() const
 {
     static QString graph;
