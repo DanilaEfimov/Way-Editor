@@ -109,7 +109,7 @@ const fileFormat &Dialog::getData() const
 void Dialog::initProtocol(QLineEdit* path_, QLineEdit* type_)
 {
     this->data.path = path_->text();
-    int fileT = Parser::getExtention(path_->text());
+    int fileT = Parser::getFileType(path_->text());
     if(fileT == -1){
         Dialog::Warning(_INVALID_INPUT_);
         return;

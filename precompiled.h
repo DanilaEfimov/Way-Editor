@@ -7,6 +7,9 @@
 #include <QFile>
 #include <QDir>
 
+#include <QTextEdit>
+#include <QStringList>
+
 #include "Graphs/graph.h"
 #include "Graphs/udirgraph.h"
 #include "Graphs/dirgraph.h"

@@ -103,18 +103,26 @@ void MainWindow::newFileEvent()
     inputForm.newFileForm();
     fileFormat descriptor = inputForm.getData();
 
+    int verdict = FileManager::createNewFile(descriptor.path);
+    if(verdict == ERROR_CODE){
+        Dialog::Warning(_PROBLEM_OF_OPEN_FILE_);
+        return;
+    }
+
     int graphType = descriptor.graphType;
     Graph* item = GraphParser::createGraph(graphType);
     if(item == nullptr){return;}
     QTextEdit* itemEdit = new QTextEdit(this);
     itemEdit->setText(descriptor.path);
     this->addTab(itemEdit, item, descriptor.path);
+
+    ui->input_area->setReadOnly(false);
 }
 
 void MainWindow::openFileEvent()
 {
     QString filePath = QFileDialog::getOpenFileName(nullptr, "Choose Your Graph file", "", "All Files (*)");
-    int type = Parser::getExtention(filePath);
+    int type = Parser::getFileType(filePath);
     if(type == -1){
         Dialog::Error(_UNDFINED_FILE_TYPE);
         return;
@@ -126,6 +134,8 @@ void MainWindow::openFileEvent()
     QFile file(filePath);
     file.open(QFile::ReadOnly);
     QString graphStr = file.readAll();
+
+    ui->input_area->setReadOnly(false);
 }
 
 void MainWindow::showHustory()
@@ -136,6 +146,59 @@ void MainWindow::showHustory()
 void MainWindow::showHelpMsg()
 {
 
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    static QString argv;
+    if(!ui->input_area->hasFocus()){
+        return;
+    }
+
+    this->cast_keyEvent(argv, event);
+    ui->input_area->setFocus();
+    // here maybe QTextEdit обработчик перехватывает и обрабатывает
+}
+
+void MainWindow::cast_keyEvent(QString &line, QKeyEvent *e)
+{
+    // here maybe QTextEdit обработчик перехватывает и обрабатывает
+    switch(e->key()){
+        case Qt::Key_Enter:     this->cast_enter(line); break;
+        case Qt::Key_Return:    this->cast_enter(line); break;
+        case Qt::Key_Back:    this->cast_backspace(); break;
+    default:
+            if(!Parser::isSpecialChar(e->key())) { this->keys++; }
+        return;
+    }
+}
+
+void MainWindow::cast_enter(QString &argv)
+{
+    argv = Parser::lastLine(ui->input_area);
+    Graph* G = this->currentGraph();
+    int res = GraphManager::calculate(argv, G);
+    if(res != SUCCESS_CODE){
+        Dialog::Error(_INDEFINED_COMMAND_);
+    }
+    this->keys = 0;
+}
+
+void MainWindow::cast_backspace()
+{
+    if(this->keys){
+        this->keys--;
+    }
+}
+
+Graph *MainWindow::currentGraph() const
+{
+    int index = ui->files_tab->currentIndex();
+    if(index == 0) {
+        return nullptr;
+    }
+    Graph* current = graphs.at(index);
+    return current;
 }
 
 void MainWindow::initMenuBar()
@@ -182,6 +245,7 @@ void MainWindow::initWidgets()
     ui->files_tab->removeTab(1);
     ui->files_tab->setTabText(0, _HELLO_);
     ui->start_massage->setReadOnly(true);
+    ui->input_area->setReadOnly(true);
 
     QFile text;
     text.setFileName(MSG_F);

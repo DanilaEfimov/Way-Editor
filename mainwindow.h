@@ -5,6 +5,7 @@
 
 #include <QMainWindow>
 #include <QTextEdit>
+#include <QKeyEvent>
 #include <map>
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +25,7 @@ private:
     Ui::MainWindow *ui;
     static std::map<int, Graph*> graphs;
     static std::map<int, QTextEdit*> output;
+    int keys = 0;
 
     void addTab(QTextEdit* itemEdit, Graph* item, const QString& path);
 
@@ -49,6 +51,13 @@ private slots:
 
     void showHustory();
     void showHelpMsg();
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+    void cast_keyEvent(QString& line, QKeyEvent* key); // for every case own function
+    void cast_enter(QString& argv);
+    void cast_backspace();
+    Graph* currentGraph() const;
 };
 
 
