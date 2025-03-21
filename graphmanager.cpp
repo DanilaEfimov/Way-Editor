@@ -6,6 +6,59 @@ QString GraphManager::answer = "";
 
 GraphManager::GraphManager() {}
 
+int GraphManager::oneArgOp(int code, Graph *G, const QString &argument)
+{
+    switch(code){
+    default:
+        return -1;
+    }
+    return -1;
+}
+
+int GraphManager::twoArgOp(int code, Graph *G, const QString &argument)
+{
+    switch(code){
+    default:
+        return -1;
+    }
+    return -1;
+}
+
+int GraphManager::threeArgOp(int code, Graph *G, const QString &argument)
+{
+    switch(code){
+    default:
+        return -1;
+    }
+    return -1;
+}
+
+int GraphManager::limitlessArgOp(int code, Graph *G, const QString &argument)
+{
+    switch(code){
+    default:
+        return -1;
+    }
+    return -1;
+}
+
+int GraphManager::cast_op(int code, Graph *G, const QString &arguments)
+{
+    int argc = Parser::argc(code);
+    switch(argc){
+    case ONE: oneArgOp(code,G,arguments); break;
+    case TWO: break;
+    case THREE: break;
+    case FOUR: break;
+    case LIMITLESS: break;
+    case EVEN: break;
+    default:
+        return -1;
+        break;
+    }
+    return -1;
+}
+
 int GraphManager::cast_op0(QTextEdit *pad)
 {
     pad->setText(QString(""));
@@ -90,7 +143,9 @@ int GraphManager::cast_op4(Graph *G, int from, int to)
 
 int GraphManager::calculate(QString &argv, Graph *G)
 {
-
+    int opCode = Parser::op(argv);
+    //int argCount = Parser::argc(opCode);
+    QString arguments = Parser::argv(argv);
 }
 
 // ^^^ GraphManager / FileManager vvv

@@ -47,6 +47,7 @@
 #define _PROHIBITED_CHARACTERS_ "Path contains prohibited chars."
 #define _PROBLEM_OF_OPEN_FILE_ "Issues with opening file. \
 \n You can try other path (can be problems with access rights). "
+#define _EXEC_ERROR_ "Command cannot be executed.\n"
 
 #include <map>
 #include <string>

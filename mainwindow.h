@@ -1,7 +1,9 @@
+#pragma once
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include "Graphs/graph.h"
+#include "Overrided/console.h"
 
 #include <QMainWindow>
 #include <QTextEdit>
@@ -17,15 +19,15 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    friend class Console;
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+    static Ui::MainWindow *ui;
     static std::map<int, Graph*> graphs;
     static std::map<int, QTextEdit*> output;
-    int keys = 0;
 
     void addTab(QTextEdit* itemEdit, Graph* item, const QString& path);
 
@@ -38,6 +40,8 @@ private:
     void initConsoleMenu();
 
     void initWidgets();
+
+    static int curTabIndex();
 
 private slots:
     void setWhiteTheme();
@@ -53,11 +57,7 @@ private slots:
     void showHelpMsg();
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
-    void cast_keyEvent(QString& line, QKeyEvent* key); // for every case own function
-    void cast_enter(QString& argv);
-    void cast_backspace();
-    Graph* currentGraph() const;
+    static Graph* currentGraph();
 };
 
 

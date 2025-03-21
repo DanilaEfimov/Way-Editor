@@ -53,7 +53,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="input_area"/>
+       <widget class="Console" name="input_area"/>
       </item>
      </layout>
     </item>
@@ -194,6 +194,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Console</class>
+   <extends>QTextEdit</extends>
+   <header location="global">Overrided\console.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

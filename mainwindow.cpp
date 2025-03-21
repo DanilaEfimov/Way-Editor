@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QFileDialog>
 
+Ui::MainWindow* MainWindow::ui = new Ui::MainWindow;
 std::map<int, Graph*> MainWindow::graphs = {};
 std::map<int, QTextEdit*> MainWindow::output = {};
 
@@ -24,7 +25,7 @@ static void clear(std::map<int, T*>& container) {
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    //, ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     this->init();
@@ -135,6 +136,12 @@ void MainWindow::openFileEvent()
     file.open(QFile::ReadOnly);
     QString graphStr = file.readAll();
 
+    Graph* item = GraphParser::initGraph(static_cast<fileTypes>(type), filePath);
+    if(item == nullptr){return;}
+    QTextEdit* itemEdit = new QTextEdit(this);
+    itemEdit->setText(filePath);
+    this->addTab(itemEdit, item, filePath);
+
     ui->input_area->setReadOnly(false);
 }
 
@@ -148,50 +155,7 @@ void MainWindow::showHelpMsg()
 
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    static QString argv;
-    if(!ui->input_area->hasFocus()){
-        return;
-    }
-
-    this->cast_keyEvent(argv, event);
-    ui->input_area->setFocus();
-    // here maybe QTextEdit обработчик перехватывает и обрабатывает
-}
-
-void MainWindow::cast_keyEvent(QString &line, QKeyEvent *e)
-{
-    // here maybe QTextEdit обработчик перехватывает и обрабатывает
-    switch(e->key()){
-        case Qt::Key_Enter:     this->cast_enter(line); break;
-        case Qt::Key_Return:    this->cast_enter(line); break;
-        case Qt::Key_Back:    this->cast_backspace(); break;
-    default:
-            if(!Parser::isSpecialChar(e->key())) { this->keys++; }
-        return;
-    }
-}
-
-void MainWindow::cast_enter(QString &argv)
-{
-    argv = Parser::lastLine(ui->input_area);
-    Graph* G = this->currentGraph();
-    int res = GraphManager::calculate(argv, G);
-    if(res != SUCCESS_CODE){
-        Dialog::Error(_INDEFINED_COMMAND_);
-    }
-    this->keys = 0;
-}
-
-void MainWindow::cast_backspace()
-{
-    if(this->keys){
-        this->keys--;
-    }
-}
-
-Graph *MainWindow::currentGraph() const
+Graph *MainWindow::currentGraph()
 {
     int index = ui->files_tab->currentIndex();
     if(index == 0) {
@@ -253,3 +217,9 @@ void MainWindow::initWidgets()
     QString txtStr = text.readAll();
     ui->start_massage->setText(txtStr);
 }
+
+int MainWindow::curTabIndex()
+{
+    return ui->files_tab->currentIndex();
+}
+

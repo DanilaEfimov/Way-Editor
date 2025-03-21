@@ -24,6 +24,7 @@ public:
     // COMMAND PARSER
     static QString& lastLine(const QTextEdit* textEdit);
     static int op(QString& argv);
+    static QString& argv(QString& line);
     static int argc(int command);
 };
 

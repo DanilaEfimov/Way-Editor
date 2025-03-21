@@ -132,6 +132,15 @@ int Parser::op(QString &argv)
     }
 }
 
+QString &Parser::argv(QString &line)
+{
+    static QString argv;
+    size_t pos = line.toStdString().find_first_of(' ');
+    pos = pos == std::string::npos ? 0 : pos;
+    argv = QString::fromStdString(line.toStdString().substr(pos, line.size()));
+    return argv;
+}
+
 int Parser::argc(int command)
 {
     if(op_argc.find(command) != op_argc.end()){
@@ -213,7 +222,7 @@ Graph *GraphParser::createGraph(int type, const adj_list &vl)
         case graphTypes::bitree:            return new DirGraph(vl); break;
         case graphTypes::weightedtree:      return new DirGraph(vl); break;
     default:
-
+        Dialog::Error(_UNDEFINED_GRAPH_TYPE_);
         return nullptr;
     }
     return nullptr;
@@ -248,12 +257,14 @@ bool **GraphParser::readMat(QString &file)
 
 const edge_list &GraphParser::readEdgeList(const QString &file)
 {
-
+    static edge_list el;
+    return el;
 }
 
 const adj_list &GraphParser::readAdjectList(const QString &file)
 {
-
+    static adj_list vl;
+    return vl;
 }
 
 Graph *GraphParser::initGraph(fileTypes fileType, QString &file)
