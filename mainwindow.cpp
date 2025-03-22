@@ -1,6 +1,6 @@
 #include "general.h"
 #include "parser.h"
-#include "dialog.h"
+#include "Overrided/dialog.h"
 #include "graphmanager.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -59,6 +59,7 @@ void MainWindow::init()
 
 void MainWindow::initWindow()
 {
+    this->setWindowTitle(NAME);
     this->setWindowIcon(QIcon(ICON_F));
 }
 
@@ -117,6 +118,8 @@ void MainWindow::newFileEvent()
     itemEdit->setText(descriptor.path);
     this->addTab(itemEdit, item, descriptor.path);
 
+    int index = ui->files_tab->count() - 1;
+    ui->files_tab->setCurrentIndex(index);
     ui->input_area->setReadOnly(false);
 }
 
@@ -145,14 +148,19 @@ void MainWindow::openFileEvent()
     ui->input_area->setReadOnly(false);
 }
 
-void MainWindow::showHustory()
+void MainWindow::showHistory()
 {
 
 }
 
 void MainWindow::showHelpMsg()
 {
-
+    QFile helptxt;
+    helptxt.setFileName(HELP_F);
+    helptxt.open(QFile::ReadOnly);
+    QString help = helptxt.readAll();
+    ui->start_massage->setText(help);
+    helptxt.close();
 }
 
 Graph *MainWindow::currentGraph()
@@ -201,7 +209,7 @@ void MainWindow::initViewMenu()
 
 void MainWindow::initConsoleMenu()
 {
-
+    connect(ui->help, &QAction::triggered, this, &MainWindow::showHelpMsg);
 }
 
 void MainWindow::initWidgets()

@@ -6,7 +6,17 @@ QString GraphManager::answer = "";
 
 GraphManager::GraphManager() {}
 
-int GraphManager::oneArgOp(int code, Graph *G, const QString &argument)
+int GraphManager::oneArgOp(int code, Graph *G, QString &argument)
+{
+    switch(code){
+    case operations::add_vertex: cast_op1(G, argument); break;
+    default:
+        return -1;
+    }
+    return -1;
+}
+
+int GraphManager::twoArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
     default:
@@ -15,7 +25,7 @@ int GraphManager::oneArgOp(int code, Graph *G, const QString &argument)
     return -1;
 }
 
-int GraphManager::twoArgOp(int code, Graph *G, const QString &argument)
+int GraphManager::threeArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
     default:
@@ -24,34 +34,28 @@ int GraphManager::twoArgOp(int code, Graph *G, const QString &argument)
     return -1;
 }
 
-int GraphManager::threeArgOp(int code, Graph *G, const QString &argument)
+int GraphManager::limitlessArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
+        case operations::add_vertex: return cast_op1(G, argument); break;
+        case operations::add_edge: break;
+        case operations::erase_vertex: break;
+        case operations::erase_edge: return cast_op4(G, argument); break;
     default:
         return -1;
     }
     return -1;
 }
 
-int GraphManager::limitlessArgOp(int code, Graph *G, const QString &argument)
-{
-    switch(code){
-    default:
-        return -1;
-    }
-    return -1;
-}
-
-int GraphManager::cast_op(int code, Graph *G, const QString &arguments)
+int GraphManager::cast_op(int code, Graph *G, QString &arguments)
 {
     int argc = Parser::argc(code);
     switch(argc){
-    case ONE: oneArgOp(code,G,arguments); break;
-    case TWO: break;
-    case THREE: break;
-    case FOUR: break;
-    case LIMITLESS: break;
-    case EVEN: break;
+        case ONE: return oneArgOp(code,G,arguments); break;
+        case TWO: break;
+        case THREE: break;
+        case FOUR: break;
+        case LIMITLESS: return limitlessArgOp(code, G, arguments); break;
     default:
         return -1;
         break;
@@ -65,8 +69,10 @@ int GraphManager::cast_op0(QTextEdit *pad)
     return operations::clear_text;
 }
 
-int GraphManager::cast_op1(Graph *G, std::set<int> &adj)
+int GraphManager::cast_op1(Graph *G, QString& argv)
 {
+    argument arg = Parser::VLfromArgv(argv);
+    std::set<int> adj = arg.list;
     int type = G->type();
     switch(type){
         case graphTypes::udirgraph:         G->addV(adj); break;
@@ -84,8 +90,11 @@ int GraphManager::cast_op1(Graph *G, std::set<int> &adj)
     return operations::add_vertex;
 }
 
-int GraphManager::cast_op2(Graph *G, int from, int to)
+int GraphManager::cast_op2(Graph *G, QString& argv)
 {
+    argument arg = Parser::EdgeFromArgv(argv);
+    int from = arg.e.first;
+    int to = arg.e.second;
     int type = G->type();
     switch(type){
         case graphTypes::udirgraph:         G->addE(from, to); break;
@@ -94,17 +103,22 @@ int GraphManager::cast_op2(Graph *G, int from, int to)
         case graphTypes::dpseudograph:      G->addE(from, to); break;
         case graphTypes::uweightedgraph:    G->addE(from, to); break;
         case graphTypes::dweightedgraph:    G->addE(from, to); break;
-        case graphTypes::tree:              return -1; break;
-        case graphTypes::bitree:            return -1; break;
-        case graphTypes::weightedtree:      return -1; break;
+        case graphTypes::tree:
+            GraphManager::answer = _GRAPH_TYPE_CMD_ERROR_; return -1; break;
+        case graphTypes::bitree:
+            GraphManager::answer = _GRAPH_TYPE_CMD_ERROR_; return -1; break;
+        case graphTypes::weightedtree:
+            GraphManager::answer = _GRAPH_TYPE_CMD_ERROR_; return -1; break;
     default:
         return -1;
     }
     return operations::add_edge;
 }
 
-int GraphManager::cast_op3(Graph *G, int id)
+int GraphManager::cast_op3(Graph *G, QString& argv)
 {
+    argument arg = Parser::VLfromArgv(argv);
+    int id = arg.v;
     int type = G->type();
     switch(type){
         case graphTypes::udirgraph:         G->eraseV(id); break;
@@ -122,21 +136,31 @@ int GraphManager::cast_op3(Graph *G, int id)
     return operations::erase_vertex;
 }
 
-int GraphManager::cast_op4(Graph *G, int from, int to)
+int GraphManager::cast_op4(Graph *G, QString& argv)
 {
+    argument arg = Parser::ELfromArgv(argv);
     int type = G->type();
-    switch(type){
-        case graphTypes::udirgraph:         G->eraseE(from, to); break;
-        case graphTypes::dirgraph:          G->eraseE(from, to); break;
-        case graphTypes::upseudograph:      G->eraseE(from, to); break;
-        case graphTypes::dpseudograph:      G->eraseE(from, to); break;
-        case graphTypes::uweightedgraph:    G->eraseE(from, to); break;
-        case graphTypes::dweightedgraph:    G->eraseE(from, to); break;
-        case graphTypes::tree:              G->eraseE(from, to); break;
-        case graphTypes::bitree:            G->eraseE(from, to); break;
-        case graphTypes::weightedtree:      G->eraseE(from, to); break;
-    default:
-        return -1;
+    while(!arg.el.empty()){
+        int from = arg.el.begin()->first;
+        int to = arg.el.begin()->second;
+        if(from <= 0 || from > G->getV() || to <= 0 || to > G->getV()){
+            GraphManager::answer = _UNDEFINED_ARG_ERROR;
+            return -1;
+        }
+        arg.el.erase(arg.el.begin());
+        switch(type){
+            case graphTypes::udirgraph:         G->eraseE(from, to); break;
+            case graphTypes::dirgraph:          G->eraseE(from, to); break;
+            case graphTypes::upseudograph:      G->eraseE(from, to); break;
+            case graphTypes::dpseudograph:      G->eraseE(from, to); break;
+            case graphTypes::uweightedgraph:    G->eraseE(from, to); break;
+            case graphTypes::dweightedgraph:    G->eraseE(from, to); break;
+            case graphTypes::tree:              G->eraseE(from, to); break;
+            case graphTypes::bitree:            G->eraseE(from, to); break;
+            case graphTypes::weightedtree:      G->eraseE(from, to); break;
+        default:
+            return -1;
+        }
     }
     return operations::erase_edge;
 }
@@ -144,8 +168,9 @@ int GraphManager::cast_op4(Graph *G, int from, int to)
 int GraphManager::calculate(QString &argv, Graph *G)
 {
     int opCode = Parser::op(argv);
-    //int argCount = Parser::argc(opCode);
     QString arguments = Parser::argv(argv);
+    int res = cast_op(opCode, G, arguments);
+    return res;
 }
 
 // ^^^ GraphManager / FileManager vvv
@@ -181,10 +206,7 @@ bool FileManager::isValidPath(const QString &path)
 bool FileManager::isExistingDir(const QString &path)
 {
     QDir dir(path);
-    if (dir.exists()){
-        return true;
-    }
-    return false;
+    return dir.exists();
 }
 
 bool FileManager::isExistingFile(const QString &path)

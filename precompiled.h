@@ -9,6 +9,7 @@
 #include <QDir>
 
 #include <QTextEdit>
+#include <QTextStream>
 #include <QStringList>
 
 #include "Graphs/graph.h"
@@ -17,7 +18,7 @@
 #include "Graphs/upseudograph.h"
 
 #include "general.h"
-#include "dialog.h"
+#include "Overrided/dialog.h"
 #include "parser.h"
 #include "graphmanager.h"
 

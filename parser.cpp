@@ -1,7 +1,4 @@
-#include "parser.h"
 #include "precompiled.h"
-#include "dialog.h"
-#include "general.h"
 
 #include <QTextStream>
 #include <QBuffer>
@@ -118,7 +115,7 @@ QString &Parser::lastLine(const QTextEdit *textEdit)
 int Parser::op(QString &argv)
 {
     size_t left = 0;
-    size_t right = argv.lastIndexOf(' ');
+    size_t right = argv.toStdString().find_first_of(' ');
 
     QString op = argv.mid(left, right);
     std::string res = op.toStdString();
@@ -128,6 +125,7 @@ int Parser::op(QString &argv)
         return key;
     }
     else{
+        GraphManager::answer = _UNDEFINED_OP_ERROR_;
         return ERROR_CODE;
     }
 }
@@ -148,6 +146,51 @@ int Parser::argc(int command)
         return argc;
     }
     return ERROR_CODE;
+}
+
+argument Parser::VLfromArgv(QString &argv)
+{
+    argument connectivity;
+    QTextStream ss(&argv, QTextStream::ReadOnly);
+    int to = 1;
+    while(!ss.atEnd()){
+        ss >> to;
+        if(to == 0){
+            break;
+        }
+        connectivity.list.insert(to);
+    }
+    return connectivity;
+}
+
+argument Parser::ELfromArgv(QString &argv)
+{
+    argument ed;
+    QTextStream ss(&argv, QTextStream::ReadOnly);
+    int from, to;
+    while(!ss.atEnd()){
+        from = -1, to = -1; // init flags
+        ss >> from >> to;
+        if(from > 0 && to > 0)
+            ed.el.insert(edge(from,to));
+    }
+    return ed;
+}
+
+argument Parser::EdgeFromArgv(QString &argv)
+{
+    argument ed;
+    QTextStream ss(&argv, QTextStream::ReadOnly);
+    ss >> ed.e.first >> ed.e.second;
+    return ed;
+}
+
+argument Parser::VfromArgv(QString &argv)
+{
+    argument vertex;
+    QTextStream ss(&argv, QTextStream::ReadOnly);
+    ss >> vertex.v;
+    return vertex;
 }
 
 // ^^^ PARSER / GRAPH_PARSER vvv
@@ -255,31 +298,67 @@ bool **GraphParser::readMat(QString &file)
     return mat;
 }
 
-const edge_list &GraphParser::readEdgeList(const QString &file)
+const edge_list &GraphParser::readEdgeList(QString &file)
 {
     static edge_list el;
+    QString line;
+    QTextStream ss(&file, QTextStream::ReadOnly);
+    ss.readLine();  // graph type ignore
+
+    int from, to;
+    while(!ss.atEnd()){
+        line = ss.readLine();
+        QTextStream ls(&line);
+        ls >> from >> to;
+        edge e = edge(from, to);
+        el.insert(e);
+    }
     return el;
 }
 
-const adj_list &GraphParser::readAdjectList(const QString &file)
+const adj_list &GraphParser::readAdjectList(QString &file)
 {
     static adj_list vl;
+    QString line;
+    QTextStream ss(&file, QTextStream::ReadOnly);
+    ss.readLine();  // graph type ignore
+    ss.readLine();  // vertex count ignore
+
+    int from = 1, to;
+    while(!ss.atEnd()){
+        line = ss.readLine();
+        QTextStream ls(&line);
+        while(!ls.atEnd()){
+            ls >> to;
+            vl[from].insert(to);
+        }
+        from++;
+    }
     return vl;
 }
 
 Graph *GraphParser::initGraph(fileTypes fileType, QString &file)
 {
+    int v = Parser::readVertexCount(file);
     switch(fileType){
     case fileTypes::MAT:
     {
-        int v;
-        v = Parser::readVertexCount(file);
         bool** mat = readMat(file);
         return createGraph(fileType, v, mat);
     }
         break;
-    case fileTypes::EL: break;
-    case fileTypes::VL: break;
+    case fileTypes::EL:
+    {
+        edge_list el = readEdgeList(file);
+        return createGraph(fileType, el);
+    }
+        break;
+    case fileTypes::VL:
+    {
+        adj_list vl = readAdjectList(file);
+        return createGraph(fileType, vl);
+    }
+        break;
     default:
         Dialog::Error(_UNDFINED_FILE_TYPE);
         return nullptr;

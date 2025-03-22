@@ -1,6 +1,8 @@
 #ifndef GENERAL_H
 #define GENERAL_H
 
+#define NAME "Way Editor"
+
 #define WHITE_F ":/qss/white.css"
 #define BLACK_F ":/qss/black.css"
 #define ERROR_QSS_F ":/qss/error_box.css"
@@ -15,11 +17,13 @@
 #define INPUT_FORM_F ":/icons/input_form.ico"
 #define WARNING_ICO_F ":/icons/warning.ico"
 #define MSG_F ":/texts/from_developers.txt"
+#define HELP_F ":/texts/help.txt"
 
+// ^^^ resource path / other VVV
 #define ERROR_BOX "error_box"
 #define WARNING_BOX "warning_box"
 #define MAX_DIALOG_SIZE QSize(300,200);
-#define ERROR_CODE 1
+#define ERROR_CODE -1
 #define SUCCESS_CODE 0
 
 #define _HELLO_ "From developers"
@@ -47,7 +51,12 @@
 #define _PROHIBITED_CHARACTERS_ "Path contains prohibited chars."
 #define _PROBLEM_OF_OPEN_FILE_ "Issues with opening file. \
 \n You can try other path (can be problems with access rights). "
-#define _EXEC_ERROR_ "Command cannot be executed.\n"
+
+// ^^^ other / console answers vvv
+#define _UNDEFINED_ARG_ERROR "Undefined argument."
+#define _UNDEFINED_OP_ERROR_ "Undefined operation."
+#define _GRAPH_TYPE_CMD_ERROR_ "The command is not supported by this type of graph."
+#define _EXEC_ERROR_ "Command cannot be executed."
 
 #include <map>
 #include <string>
@@ -103,8 +112,8 @@ const std::map<std::string, int> op_str{
 };
 
 const std::map<int, int> op_argc{
-    permutation(clear_text, ONE), permutation(add_vertex, LIMITLESS), permutation(add_edge, EVEN),
-    permutation(erase_vertex, ONE), permutation(erase_edge, EVEN), permutation(degree, ONE),
+    permutation(clear_text, ONE), permutation(add_vertex, LIMITLESS), permutation(add_edge, LIMITLESS),
+    permutation(erase_vertex, ONE), permutation(erase_edge, LIMITLESS), permutation(degree, ONE),
 };
 
 const std::map<int, int> argc_op{

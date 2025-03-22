@@ -5,6 +5,14 @@
 
 #include <QKeyEvent>
 
+struct argument {
+    edge_list el;
+    adj_list vl;
+    std::set<int> list;
+    edge e;
+    int v;
+};
+
 class GraphParser;
 
 class Parser
@@ -26,6 +34,11 @@ public:
     static int op(QString& argv);
     static QString& argv(QString& line);
     static int argc(int command);
+
+    static argument VLfromArgv(QString& argv);
+    static argument ELfromArgv(QString& argv);
+    static argument EdgeFromArgv(QString& argv);
+    static argument VfromArgv(QString& argv);
 };
 
 // ^^^ Parser / GraphParser vvv
@@ -42,8 +55,8 @@ public:
     static Graph* createGraph(int type, const adj_list& vl);
 
     static bool** readMat(QString& file);
-    static const edge_list& readEdgeList(const  QString& file);
-    static const adj_list& readAdjectList(const QString& file);
+    static const edge_list& readEdgeList(QString& file);
+    static const adj_list& readAdjectList(QString& file);
 
     static Graph* initGraph(fileTypes fileType, QString& file);
 };
