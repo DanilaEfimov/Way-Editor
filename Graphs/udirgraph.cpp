@@ -1,6 +1,6 @@
 #include "udirgraph.h"
 
-UDirGraph::UDirGraph()
+UDirGraph::UDirGraph() : Graph()
 {
     this->V = 0;
     this->E = 0;
@@ -27,6 +27,7 @@ UDirGraph::UDirGraph(const edge_list &el)   // edge list
     this->E = 0;
     for(auto& e : el){
         this->conectLists[e.first].insert(e.second);
+        this->conectLists[e.second].insert(e.first);
         this->E++;
         if(e.first > this->V || e.second > this->V){
             this->V = std::max(e.first, e.second);
@@ -53,6 +54,7 @@ UDirGraph::~UDirGraph()
 void UDirGraph::addV(const std::set<int> &list)
 {
     this->V++;
+    this->conectLists[this->V] = {};
     for(auto& v : list){
         if(v > 0 && v < this->V){
             this->conectLists[this->V].insert(v);
@@ -108,13 +110,14 @@ const QString &UDirGraph::show() const
 {
     static QString graph;
     graph = "UDirGraph\n";
-    for(int i = 0; i < this->V; i++){
-        QString curV = QString::fromStdString(std::to_string(i+1));
+    for(int i = 1; i <= this->V; i++){
+        QString curV = QString::fromStdString(std::to_string(i));
         graph += curV + ": ";
-        std::set<int> list = this->conectLists.at(i+1);
-        for(int j = 0; j < list.size(); j++){
-            graph += QString::fromStdString(std::to_string(j+1));
-            if(j != list.size()){
+        std::set<int> list = this->conectLists.at(i);
+        for(auto j = list.begin(); j != list.end();){
+            QString neighbour = QString::fromStdString((std::to_string(*j)));
+            graph += neighbour;
+            if(j++ != list.end()){
                 graph += ", ";
             }
         }
