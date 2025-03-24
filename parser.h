@@ -28,6 +28,7 @@ public:
     static const QString& getGraphType(int code);
 
     static int readVertexCount(QString& file);
+    static QString graphType(const Graph* G);
 
     // COMMAND PARSER
     static QString& lastLine(const QTextEdit* textEdit);
@@ -47,6 +48,7 @@ class GraphParser
 {
 protected:
     GraphParser();
+
 public:
     // Graph Object Generators for every file type
     static Graph* createGraph(int type);
@@ -57,6 +59,8 @@ public:
     static bool** readMat(QString& file);
     static const edge_list& readEdgeList(QString& file);
     static const adj_list& readAdjectList(QString& file);
+
+    static QString& toStr(Graph* G, fileTypes filetype);
 
     static Graph* initGraph(fileTypes fileType, QString& file);
 };

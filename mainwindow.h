@@ -52,6 +52,7 @@ private slots:
 
     void newFileEvent();
     void openFileEvent();
+    void saveFileEvent();
 
     void showHistory();
     void showHelpMsg();

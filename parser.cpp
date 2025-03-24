@@ -95,6 +95,11 @@ int Parser::readVertexCount(QString &file)
     return v;
 }
 
+QString Parser::graphType(const Graph *G)
+{
+    return QString::fromStdString(r_graphs.at(G->type()));
+}
+
 QString &Parser::lastLine(const QTextEdit *textEdit)
 {
     static QString text;
@@ -319,13 +324,14 @@ const edge_list &GraphParser::readEdgeList(QString &file)
 const adj_list &GraphParser::readAdjectList(QString &file)
 {
     static adj_list vl;
+    int v;
     QString line;
     QTextStream ss(&file, QTextStream::ReadOnly);
     ss.readLine();  // graph type ignore
-    ss.readLine();  // vertex count ignore
+    ss >> v;        // vertex count
 
     int from = 1, to;
-    while(!ss.atEnd()){
+    while(!ss.atEnd() || from <= v){
         line = ss.readLine();
         QTextStream ls(&line);
         while(!ls.atEnd()){
@@ -335,6 +341,21 @@ const adj_list &GraphParser::readAdjectList(QString &file)
         from++;
     }
     return vl;
+}
+
+QString &GraphParser::toStr(Graph *G, fileTypes filetype)
+{
+    static QString data;
+    switch(filetype){
+    case fileTypes::VL:     data = G->toVL(); break;
+    case fileTypes::EL:     data = G->toEL(); break;
+    case fileTypes::MAT:    data = G->toMat();break;
+    default:
+        data = "";
+        return data;
+        break;
+    }
+    return data;
 }
 
 Graph *GraphParser::initGraph(fileTypes fileType, QString &file)

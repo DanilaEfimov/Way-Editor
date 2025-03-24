@@ -148,6 +148,30 @@ void MainWindow::openFileEvent()
     ui->input_area->setReadOnly(false);
 }
 
+void MainWindow::saveFileEvent()
+{
+    static QString data;
+
+    int index = this->curTabIndex();
+    if(!index){return;}
+    QString filename = ui->files_tab->tabText(index);
+
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        Dialog::Warning(_OPEN_FILE_ERROR_);
+        return;
+    }
+
+    QTextStream in(&file);
+    Graph* G = graphs[index];
+    fileTypes filetype = static_cast<fileTypes>(Parser::getFileType(filename));
+    data = GraphParser::toStr(G, filetype);
+    in << data << '\n';
+    file.close();
+
+    data = "";
+}
+
 void MainWindow::showHistory()
 {
 
@@ -189,6 +213,7 @@ void MainWindow::initFileMenu()
     ui->remove->setIcon(QIcon(REMOVE_F));
     connect(ui->new_file, &QAction::triggered, this, &MainWindow::newFileEvent);
     connect(ui->open, &QAction::triggered, this, &MainWindow::openFileEvent);
+    connect(ui->save, &QAction::triggered, this, &MainWindow::saveFileEvent);
 }
 
 void MainWindow::initViewMenu()

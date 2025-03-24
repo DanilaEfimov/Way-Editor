@@ -51,6 +51,7 @@
 #define _PROHIBITED_CHARACTERS_ "Path contains prohibited chars."
 #define _PROBLEM_OF_OPEN_FILE_ "Issues with opening file. \
 \n You can try other path (can be problems with access rights). "
+#define _OPEN_FILE_ERROR_ "Could not open file."
 
 // ^^^ other / console answers vvv
 #define _UNDEFINED_ARG_ERROR "Undefined argument."
