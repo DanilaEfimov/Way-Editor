@@ -95,9 +95,10 @@ const QString &DirGraph::show() const
         QString curV = QString::fromStdString(std::to_string(i+1));
         graph += curV + ": ";
         std::set<int> list = this->conectLists.at(i+1);
-        for(int j = 0; j < list.size(); j++){
-            graph += QString::fromStdString(std::to_string(j+1));
-            if(j != list.size()){
+        for(auto j = list.begin(); j != list.end();){
+            QString neighbour = QString::fromStdString((std::to_string(*j)));
+            graph += neighbour;
+            if(j++ != list.end()){
                 graph += ", ";
             }
         }

@@ -27,9 +27,14 @@ public:
     virtual int getDegree(int v) const;
 
     // ACCESSORS
+    bool empty() const;
     int getV() const;
     int getE() const;
     bool isConected(int from, int to) const;
+
+    QString& toVL() const;
+    QString& toEL() const;
+    QString& toMat() const;
 
     virtual int type() const = 0;
 
