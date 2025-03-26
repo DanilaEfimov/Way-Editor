@@ -3,6 +3,9 @@
 
 #include "graph.h"
 
+typedef std::pair<int,int> edge;
+typedef std::set<edge> edge_list;
+
 class DirGraph : public Graph
 {
 public:

@@ -57,6 +57,7 @@ QString &Graph::toMat() const
     // if some index don't exist, it will
     // be writen like an empty vertex, unconnected
     // zeros in matrix
+    // recomended to save unsepareted vertities indexes graphs
 }
 
 void Graph::addV(const std::set<int> &list)
