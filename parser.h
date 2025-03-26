@@ -62,7 +62,7 @@ public:
 
     static QString& toStr(Graph* G, fileTypes filetype);
 
-    static Graph* initGraph(fileTypes fileType, QString& file);
+    static Graph* initGraph(graphTypes graphType, fileTypes fileType, QString& file);
 };
 
 #endif // PARSER_H

@@ -139,12 +139,16 @@ void MainWindow::openFileEvent()
     file.open(QFile::ReadOnly);
     QString graphStr = file.readAll();
 
-    Graph* item = GraphParser::initGraph(static_cast<fileTypes>(type), filePath);
+    int graphType = Parser::getFileType(filePath);
+    Graph* item = GraphParser::initGraph(static_cast<graphTypes>(graphType),
+                                         static_cast<fileTypes>(type), filePath);
     if(item == nullptr){return;}
     QTextEdit* itemEdit = new QTextEdit(this);
     itemEdit->setText(filePath);
     this->addTab(itemEdit, item, filePath);
 
+    int index = ui->files_tab->count() - 1;
+    ui->files_tab->setCurrentIndex(index);
     ui->input_area->setReadOnly(false);
 }
 

@@ -358,26 +358,26 @@ QString &GraphParser::toStr(Graph *G, fileTypes filetype)
     return data;
 }
 
-Graph *GraphParser::initGraph(fileTypes fileType, QString &file)
+Graph *GraphParser::initGraph(graphTypes graphType, fileTypes fileType, QString &file)
 {
     int v = Parser::readVertexCount(file);
     switch(fileType){
     case fileTypes::MAT:
     {
         bool** mat = readMat(file);
-        return createGraph(fileType, v, mat);
+        return createGraph(graphType, v, mat);
     }
         break;
     case fileTypes::EL:
     {
         edge_list el = readEdgeList(file);
-        return createGraph(fileType, el);
+        return createGraph(graphType, el);
     }
         break;
     case fileTypes::VL:
     {
         adj_list vl = readAdjectList(file);
-        return createGraph(fileType, vl);
+        return createGraph(graphType, vl);
     }
         break;
     default:

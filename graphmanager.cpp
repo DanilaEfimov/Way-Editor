@@ -9,7 +9,6 @@ GraphManager::GraphManager() {}
 int GraphManager::oneArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
-    case operations::add_vertex: cast_op1(G, argument); break;
     default:
         return -1;
     }
@@ -19,6 +18,8 @@ int GraphManager::oneArgOp(int code, Graph *G, QString &argument)
 int GraphManager::twoArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
+        case operations::add_edge: return cast_op2(G, argument); break;
+        case operations::erase_edge: return cast_op4(G, argument); break;
     default:
         return -1;
     }
@@ -38,9 +39,7 @@ int GraphManager::limitlessArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
         case operations::add_vertex: return cast_op1(G, argument); break;
-        case operations::add_edge: break;
-        case operations::erase_vertex: break;
-        case operations::erase_edge: return cast_op4(G, argument); break;
+        case operations::erase_vertex: return cast_op3(G, argument); break;
     default:
         return -1;
     }
@@ -118,20 +117,23 @@ int GraphManager::cast_op2(Graph *G, QString& argv)
 int GraphManager::cast_op3(Graph *G, QString& argv)
 {
     argument arg = Parser::VLfromArgv(argv);
-    int id = arg.v;
     int type = G->type();
-    switch(type){
-        case graphTypes::udirgraph:         G->eraseV(id); break;
-        case graphTypes::dirgraph:          G->eraseV(id); break;
-        case graphTypes::upseudograph:      G->eraseV(id); break;
-        case graphTypes::dpseudograph:      G->eraseV(id); break;
-        case graphTypes::uweightedgraph:    G->eraseV(id); break;
-        case graphTypes::dweightedgraph:    G->eraseV(id); break;
-        case graphTypes::tree:              G->eraseV(id); break;
-        case graphTypes::bitree:            G->eraseV(id); break;
-        case graphTypes::weightedtree:      G->eraseV(id); break;
-    default:
-        return -1;
+    while(!arg.list.empty()){
+        int id = *arg.list.begin();
+        switch(type){
+            case graphTypes::udirgraph:         G->eraseV(id); break;
+            case graphTypes::dirgraph:          G->eraseV(id); break;
+            case graphTypes::upseudograph:      G->eraseV(id); break;
+            case graphTypes::dpseudograph:      G->eraseV(id); break;
+            case graphTypes::uweightedgraph:    G->eraseV(id); break;
+            case graphTypes::dweightedgraph:    G->eraseV(id); break;
+            case graphTypes::tree:              G->eraseV(id); break;
+            case graphTypes::bitree:            G->eraseV(id); break;
+            case graphTypes::weightedtree:      G->eraseV(id); break;
+        default:
+            return -1;
+        }
+        arg.list.erase(arg.list.begin());
     }
     return operations::erase_vertex;
 }
