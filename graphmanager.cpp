@@ -51,7 +51,7 @@ int GraphManager::cast_op(int code, Graph *G, QString &arguments)
     int argc = Parser::argc(code);
     switch(argc){
         case ONE: return oneArgOp(code,G,arguments); break;
-        case TWO: break;
+        case TWO: return twoArgOp(code, G, arguments); break;
         case THREE: break;
         case FOUR: break;
         case LIMITLESS: return limitlessArgOp(code, G, arguments); break;

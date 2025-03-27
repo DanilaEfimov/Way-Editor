@@ -88,10 +88,17 @@ const QString &Parser::getGraphType(int code)
 
 int Parser::readVertexCount(QString &file)
 {
-    QTextStream ss(&file);
+    QFile f(file);
+    if(!f.open(QFile::ReadOnly)){
+        Dialog::Warning(_OPEN_FILE_ERROR_);
+        return 0;
+    }
+    QString all = f.readAll();
+    QTextStream ss(&all);
     QString line = ss.readLine();
     int v;
     ss >> v;
+    f.close();
     return v;
 }
 
@@ -278,12 +285,18 @@ Graph *GraphParser::createGraph(int type, const adj_list &vl)
 
 bool **GraphParser::readMat(QString &file)
 {
-    QTextStream ss(&file);
+    QFile f(file);
+    if(!f.open(QFile::ReadOnly)){
+        Dialog::Warning(_OPEN_FILE_ERROR_);
+        return nullptr;
+    }
+    QString all = f.readAll();
+    QTextStream ss(&all);
 
-    QString gType;
     int v;
-    ss >> gType;
+    ss.readLine();
     ss >> v;
+    ss.readLine();
 
     bool** mat = createMat(v);
     if(mat == nullptr){
@@ -347,9 +360,9 @@ QString &GraphParser::toStr(Graph *G, fileTypes filetype)
 {
     static QString data;
     switch(filetype){
-    case fileTypes::VL:     data = G->toVL(); break;
-    case fileTypes::EL:     data = G->toEL(); break;
-    case fileTypes::MAT:    data = G->toMat();break;
+        case fileTypes::VL:     data = G->toVL(); break;
+        case fileTypes::EL:     data = G->toEL(); break;
+        case fileTypes::MAT:    data = G->toMat();break;
     default:
         data = "";
         return data;
