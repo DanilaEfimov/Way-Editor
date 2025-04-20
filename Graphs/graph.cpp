@@ -44,10 +44,10 @@ QString &Graph::toMat() const
     for(size_t i = 1; i <= v; i++){
         for(size_t j = 1; j <= v; j++){
             if(this->isConected(i, j)){
-                ts << '1' << ' ';
+                ts << "1 ";
             }
             else{
-                ts << '0' << ' ';
+                ts << "0 ";
             }
         }
         ts << '\n';

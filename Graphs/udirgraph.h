@@ -13,7 +13,7 @@ public:
     UDirGraph(int V, bool** mat);
     UDirGraph(const edge_list& el);
     UDirGraph(const adj_list& vl);
-    virtual ~UDirGraph();
+    virtual ~UDirGraph() override;
 
     virtual void addV(const std::set<int>& list) override;
     virtual void addE(int from, int to) override;
