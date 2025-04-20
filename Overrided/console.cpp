@@ -26,6 +26,7 @@ void Console::performance()
         Dialog::Error(GraphManager::answer);
     }
     this->terminator = 0;
+    Parser::updateHistory(GraphManager::answer);
 }
 
 void Console::keyPressEvent(QKeyEvent *event)
