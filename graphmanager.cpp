@@ -6,6 +6,19 @@ QString GraphManager::answer = "";
 
 GraphManager::GraphManager() {}
 
+int GraphManager::zeroArgOp(int code, Graph *G)
+{
+    if(!GraphManager::isDirected(G)){
+        return operations::kosaraju;
+    }
+    switch(code){
+        case operations::kosaraju: return cast_op6(G);break;
+    default:
+        return -1;
+    }
+    return -1;
+}
+
 int GraphManager::oneArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
@@ -46,10 +59,47 @@ int GraphManager::limitlessArgOp(int code, Graph *G, QString &argument)
     return -1;
 }
 
+bool GraphManager::isDirected(Graph *G)
+{
+    int code = G->type();
+    switch(code){
+        case graphTypes::dirgraph:          return true; break;
+        case graphTypes::udirgraph:         return false; break;
+        case graphTypes::dpseudograph:      return true; break;
+        case graphTypes::dweightedgraph:    return true; break;
+        case graphTypes::upseudograph:      return false; break;
+        case graphTypes::weightedtree:      return false; break;
+        case graphTypes::tree:              return false; break;
+        case graphTypes::bitree:            return false; break;
+    default:
+        return false;
+    }
+    return false;
+}
+
+bool GraphManager::isTree(Graph *G)
+{
+    int code = G->type();
+    switch(code){
+        case graphTypes::dirgraph:          return false; break;
+        case graphTypes::udirgraph:         return false; break;
+        case graphTypes::dpseudograph:      return false; break;
+        case graphTypes::dweightedgraph:    return false; break;
+        case graphTypes::upseudograph:      return false; break;
+        case graphTypes::weightedtree:      return true; break;
+        case graphTypes::tree:              return true; break;
+        case graphTypes::bitree:            return true; break;
+    default:
+        return false;
+    }
+    return false;
+}
+
 int GraphManager::cast_op(int code, Graph *G, QString &arguments)
 {
     int argc = Parser::argc(code);
     switch(argc){
+        case ZERO: return zeroArgOp(code, G); break;
         case ONE: return oneArgOp(code,G,arguments); break;
         case TWO: return twoArgOp(code, G, arguments); break;
         case THREE: break;
@@ -165,6 +215,25 @@ int GraphManager::cast_op4(Graph *G, QString& argv)
         }
     }
     return operations::erase_edge;
+}
+
+int GraphManager::cast_op6(Graph *G)
+{
+    if(!GraphManager::isDirected(G)){
+        return operations::kosaraju;
+    }
+    static scc components = {};
+    components = reinterpret_cast<DirGraph*>(G)->Kosaraju();
+    GraphManager::answer = "";
+    for(auto& c : components){
+        GraphManager::answer += "component: ";
+        for(auto v : c){
+            answer += QString::fromStdString(std::to_string(v)) + " ";
+        }
+        GraphManager::answer += "\n";
+    }
+    answer.chop(1); // remove last "\n"
+    return operations::kosaraju;
 }
 
 int GraphManager::calculate(QString &argv, Graph *G)

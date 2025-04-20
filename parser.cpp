@@ -107,6 +107,15 @@ QString Parser::graphType(const Graph *G)
     return QString::fromStdString(r_graphs.at(G->type()));
 }
 
+void Parser::updateHistory(QString &answer)
+{
+    QFile file("./history.txt");
+    file.write(answer.toStdString().c_str());
+    char* terminator = "/n";
+    file.write(terminator);
+    file.close();
+}
+
 QString &Parser::lastLine(const QTextEdit *textEdit)
 {
     static QString text;

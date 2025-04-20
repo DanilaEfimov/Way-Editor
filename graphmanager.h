@@ -10,10 +10,14 @@ class GraphManager
 private:
     GraphManager();
 
+    static int zeroArgOp(int code, Graph* G);
     static int oneArgOp(int code, Graph* G, QString& argument);
     static int twoArgOp(int code, Graph* G, QString& argument);
     static int threeArgOp(int code, Graph* G, QString& argument);
     static int limitlessArgOp(int code, Graph* G, QString& argument);
+
+    static bool isDirected(Graph* G);
+    static bool isTree(Graph* G);
 
 public:
 
@@ -26,6 +30,7 @@ public:
     static int cast_op2(Graph* G, QString& argv);
     static int cast_op3(Graph* G, QString& argv);
     static int cast_op4(Graph* G, QString& argv);
+    static int cast_op6(Graph* G);
 
     static int calculate(QString& argv, Graph* G);
 };

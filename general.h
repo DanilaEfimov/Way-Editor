@@ -79,7 +79,8 @@ enum {
 
 enum operations {
     clear_text,
-    add_vertex, add_edge, erase_vertex, erase_edge, degree
+    add_vertex, add_edge, erase_vertex, erase_edge, degree,
+    kosaraju,
 };
 
 enum graphTypes {
@@ -110,16 +111,22 @@ const std::map<int, std::string> r_graphs {
 const std::map<std::string, int> op_str{
     op_key("clear", clear_text), op_key("addV", add_vertex), op_key("addE", add_edge),
     op_key("eraseV", erase_vertex), op_key("eraseE", erase_edge), op_key("degree", degree),
+    op_key("kosaraju",kosaraju),
 };
 
 const std::map<int, int> op_argc{
     permutation(clear_text, ONE), permutation(add_vertex, LIMITLESS), permutation(add_edge, TWO),
     permutation(erase_vertex, TWO), permutation(erase_edge, LIMITLESS), permutation(degree, ONE),
+<<<<<<< HEAD
+    permutation(kosaraju, ZERO),
+=======
+>>>>>>> c4a626a2e3725ab737452b36229c1b6482689c22
 };
 
 const std::map<int, int> argc_op{
     permutation(ONE, clear_text), permutation(LIMITLESS, add_vertex), permutation(EVEN, add_edge),
     permutation(ONE, erase_vertex), permutation(EVEN, erase_edge), permutation(ONE, degree),
+     permutation(ZERO, kosaraju),
 };
 
 #endif // GENERAL_H
