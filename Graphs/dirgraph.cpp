@@ -1,6 +1,7 @@
 #include "dirgraph.h"
 
 #include <stack>
+#include <queue>
 
 int DirGraph::unvisitedIn(std::set<int>& visited)
 {
@@ -60,7 +61,11 @@ void DirGraph::initSCC(std::set<int>& scc, std::set<int> &visited, int start)
     }
 }
 
-void DirGraph::tarjanDFS(int v, std::map<int, int> &indices, std::map<int, int> &lowlink, std::stack<int> &stack, std::set<int> &onStack, scc &sccs, int &index)
+void DirGraph::tarjanDFS(int v, std::map<int, int> &indices,
+                        std::map<int, int> &lowlink,
+                        std::stack<int> &stack,
+                        std::set<int> &onStack,
+                        scc &sccs, int &index)
 {
     // Присваиваем текущий индекс и низший индекс
     indices[v] = lowlink[v] = index++;
@@ -95,6 +100,48 @@ void DirGraph::tarjanDFS(int v, std::map<int, int> &indices, std::map<int, int> 
     }
 }
 
+std::vector<int> DirGraph::topologicalSortKahn(const scc &sccs, const std::map<int, int> &nodeToComponent, DirGraph &G_)
+{
+    int numComponents = sccs.size();
+
+    // counting degree of in-edges for every node
+    std::vector<int> inDegree(numComponents, 0);
+
+    for (int u = 0; u < numComponents; ++u) {
+        for (int v : G_.conectLists[u]) {  // G_.adj[u] — соседи компоненты u
+            inDegree[v]++;
+        }
+    }
+
+    // zero in-degree component's queue
+    std::queue<int> q;
+    for (int i = 0; i < numComponents; ++i) {
+        if (inDegree[i] == 0) {
+            q.push(i);
+        }
+    }
+
+    std::vector<int> result;
+
+    // Khan's algorithm
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        result.push_back(u);
+
+        for (int v : G_.conectLists[u]) {
+            if (--inDegree[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+
+    if (result.size() != numComponents) {
+        throw std::runtime_error("invalid argument (cond. graph 'G_')");
+    }
+
+    return result;
+}
+
 DirGraph::DirGraph() : Graph()
 {
     this->V = 0;
@@ -102,10 +149,15 @@ DirGraph::DirGraph() : Graph()
     this->conectLists = {};
 }
 
-DirGraph::DirGraph(int V, bool **mat)
+DirGraph::DirGraph(int V, bool **mat = nullptr)
 {
     this->V = V;
     this->E = 0;
+    for(size_t i = 0; i < V; i++)
+        this->conectLists[i+1] = {};
+    if(!mat){
+        return;
+    }
     for(std::size_t i = 0; i < this->V; i++){
         for(std::size_t j = 0; j < this->V; j++){
             if(i == j){continue;}
@@ -156,6 +208,7 @@ void DirGraph::addV(const std::set<int> &list)
 
 void DirGraph::addE(int from, int to)
 {
+    if(from == to){return;}
     if(this->conectLists.find(from) != this->conectLists.end() &&
         this->conectLists.find(to) != this->conectLists.end() &&
         !this->isConected(from, to)){
@@ -221,7 +274,6 @@ scc &DirGraph::Kosaraju()
         }
     }
 
-    // fixing
     this->reverseEdges();
     return res;
 }
@@ -246,7 +298,7 @@ scc &DirGraph::Tarjan()
     }
 
     return sccs;  // Возвращаем ссылку на множество компонент
-}
+}  
 
 int DirGraph::type() const
 {
@@ -260,7 +312,8 @@ const QString &DirGraph::show() const
     for(int i = 0; i < this->V; i++){
         QString curV = QString::fromStdString(std::to_string(i+1));
         graph += curV + ": ";
-        std::set<int> list = this->conectLists.at(i+1);
+        std::set<int> list = this->conectLists.find(i+1)!=this->conectLists.end() ?
+                                 this->conectLists.at(i+1) : std::set<int>{};
         for(auto j = list.begin(); j != list.end();){
             QString neighbour = QString::fromStdString((std::to_string(*j)));
             graph += neighbour;

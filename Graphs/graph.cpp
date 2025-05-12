@@ -60,6 +60,11 @@ QString &Graph::toMat() const
     // recomended to save unsepareted vertities indexes graphs
 }
 
+Graph::~Graph()
+{
+
+}
+
 void Graph::addV(const std::set<int> &list)
 {
     this->V++;

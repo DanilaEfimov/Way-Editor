@@ -18,7 +18,7 @@ protected:
     Graph() = default;
 
 public:
-    virtual ~Graph() = default;
+    virtual ~Graph();
 
     virtual void addV(const std::set<int>& list);
     virtual void addE(int from, int to);
@@ -37,7 +37,6 @@ public:
     QString& toMat() const;
 
     virtual int type() const = 0;
-
     virtual const QString& show() const = 0;
 
 };
