@@ -16,6 +16,7 @@ SOURCES += \
     Graphs/graph.cpp \
     Graphs/udirgraph.cpp \
     Graphs/upseudograph.cpp \
+    Graphs/wdirgraph.cpp \
     Overrided/console.cpp \
     Overrided/dialog.cpp \
     graphmanager.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     Graphs/graph.h \
     Graphs/udirgraph.h \
     Graphs/upseudograph.h \
+    Graphs/wdirgraph.h \
     Overrided/console.h \
     Overrided/dialog.h \
     general.h \

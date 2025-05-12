@@ -109,7 +109,7 @@ QString Parser::graphType(const Graph *G)
 
 void Parser::updateHistory(QString &answer)
 {
-    QFile file("./history.txt");
+    QFile file("history.txt");
     file.write(answer.toStdString().c_str());
     char* terminator = "/n";
     file.write(terminator);
@@ -224,7 +224,7 @@ Graph *GraphParser::createGraph(int type)
         case graphTypes::upseudograph:      return new DirGraph(); break;
         case graphTypes::dpseudograph:      return new DirGraph(); break;
         case graphTypes::uweightedgraph:    return new DirGraph(); break;
-        case graphTypes::dweightedgraph:    return new DirGraph(); break;
+        case graphTypes::dweightedgraph:    return new WDirGraph(); break;
         case graphTypes::tree:              return new DirGraph(); break;
         case graphTypes::bitree:            return new DirGraph(); break;
         case graphTypes::weightedtree:      return new DirGraph(); break;
@@ -243,7 +243,7 @@ Graph *GraphParser::createGraph(int type, int V, bool **mat)
         case graphTypes::upseudograph:      return new DirGraph(V, mat); break;
         case graphTypes::dpseudograph:      return new DirGraph(V, mat); break;
         case graphTypes::uweightedgraph:    return new DirGraph(V, mat); break;
-        case graphTypes::dweightedgraph:    return new DirGraph(V, mat); break;
+        case graphTypes::dweightedgraph:    return new WDirGraph(V, mat); break;
         case graphTypes::tree:              return new DirGraph(V, mat); break;
         case graphTypes::bitree:            return new DirGraph(V, mat); break;
         case graphTypes::weightedtree:      return new DirGraph(V, mat); break;

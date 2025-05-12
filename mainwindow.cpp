@@ -141,15 +141,11 @@ void MainWindow::openFileEvent()
     title.remove('\n'); title.remove('\r');
     QString graphStr = file.readAll();
 
-<<<<<<< HEAD
     int graphType = Parser::getGraphType(title);
-=======
-    int graphType = Parser::getFileType(filePath);
->>>>>>> c4a626a2e3725ab737452b36229c1b6482689c22
     Graph* item = GraphParser::initGraph(static_cast<graphTypes>(graphType),
                                          static_cast<fileTypes>(type), filePath);
     if(item == nullptr){return;}
-    QTextEdit* itemEdit = new QTextEdit(this);
+    QTextEdit* itemEdit = new QTextEdit();
     itemEdit->setText(filePath);
     this->addTab(itemEdit, item, filePath);
 

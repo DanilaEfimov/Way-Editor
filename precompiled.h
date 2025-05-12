@@ -15,6 +15,7 @@
 #include "Graphs/graph.h"
 #include "Graphs/udirgraph.h"
 #include "Graphs/dirgraph.h"
+#include "Graphs/wdirgraph.h"
 #include "Graphs/upseudograph.h"
 
 #include "general.h"

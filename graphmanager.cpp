@@ -52,7 +52,9 @@ int GraphManager::limitlessArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
         case operations::add_vertex: return cast_op1(G, argument); break;
+        case operations::add_edge: return cast_op2(G, argument); break;
         case operations::erase_vertex: return cast_op3(G, argument); break;
+        case operations::erase_edge: return cast_op4(G, argument); break;
     default:
         return -1;
     }

@@ -117,10 +117,7 @@ const std::map<std::string, int> op_str{
 const std::map<int, int> op_argc{
     permutation(clear_text, ONE), permutation(add_vertex, LIMITLESS), permutation(add_edge, TWO),
     permutation(erase_vertex, TWO), permutation(erase_edge, LIMITLESS), permutation(degree, ONE),
-<<<<<<< HEAD
     permutation(kosaraju, ZERO),
-=======
->>>>>>> c4a626a2e3725ab737452b36229c1b6482689c22
 };
 
 const std::map<int, int> argc_op{
