@@ -26,4 +26,3 @@ To get started, clone the repository and follow the instructions below:
 ```bash
 git clone https://github.com/DanilaEfimov/Way-Editor.git
 cd Way-Editor
-# Follow further setup instructions (if any)
