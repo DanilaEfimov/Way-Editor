@@ -65,6 +65,7 @@ WDirGraph::~WDirGraph()
 
 WDirGraph& WDirGraph::condensation(std::vector<int> &sccs)
 {
+    // определение количества вершин в графе конденсации
     int size = 0;
     for(int v : sccs){
         if(v > size){
@@ -83,24 +84,28 @@ WDirGraph& WDirGraph::condensation(std::vector<int> &sccs)
     return G_; // все веса ребер нормализованы
 }
 
-double WDirGraph::modifiedDejcstra(int s, int t, std::vector<int> &nodeToSCC)
+#include <iostream>
+double WDirGraph::modifiedDejcstra(int s, int t, std::vector<int>& nodeToSCC)
 {
-    // алгоритм нахождения кратчайшего пути с учетом компонент сильной связности
-    // общая инициализация
-    double cost = -1.0; // по умолчанию предполагаем отсутствие пути
-    // модификации:
-    // шаг 1 (проверка эквивалентности вершин)
-    if(nodeToSCC[s-1] == nodeToSCC[t-1]){
-        // вершины эквивалентны
-        return this->localDejcstra(s,t,nodeToSCC,nodeToSCC[s-1]);
+    // Алгоритм нахождения кратчайшего пути с учетом компонент сильной связности
+    // Общая инициализация
+    double cost = -1.0; // По умолчанию предполагаем отсутствие пути
+    // Шаг 1: Проверка эквивалентности вершин
+    if (nodeToSCC[s - 1] == nodeToSCC[t - 1]) {
+        // Вершины эквивалентны, возвращаем результат локального поиска
+        return this->localDejcstra(s, t, nodeToSCC, nodeToSCC[s - 1]);
     }
-    // шаг 2 (построение конденсации графа)
-    static WDirGraph G_ = this->condensation(nodeToSCC); // можно улучшить алгоритм конденсации
-    // шаг 3 (нахождение пути в сконденсированном графе)
-    std::set<int> components = G_.DijkstraPathVertices(nodeToSCC[s-1], nodeToSCC[t-1]);
-    // шаг 4 (локальный поиск пути)
-    if(components.empty()){ return cost; }   // пути не существует
-    cost = this->localDejcstra(s,t, components, nodeToSCC);
+    // Шаг 2: Построение конденсации графа
+    static WDirGraph GT = this->condensation(nodeToSCC);
+    // Шаг 3: Нахождение пути в сконденсированном графе
+    std::set<int> components = GT.DijkstraPathVertices(nodeToSCC[s - 1], nodeToSCC[t - 1]);
+    // Шаг 4: Локальный поиск пути
+    if (components.empty()) {
+        // Пути не существует
+        return cost;
+    }
+    // Рассчитываем путь внутри компоненты
+    cost = this->localDejcstra(s, t, components, nodeToSCC);
     return cost;
 }
 
@@ -368,6 +373,7 @@ void WDirGraph::eraseE(int from, int to)
     }
     edge e = edge(from, to);
     this->eWeights.erase(e);
+    this->conectLists[from].erase(to);
 }
 
 void WDirGraph::weight(int mode)
@@ -400,6 +406,27 @@ void WDirGraph::setEWeight(int from, int to, double val)
     }
     edge e = edge(from, to);
     this->eWeights[e] = val;
+}
+
+double WDirGraph::getEW(int from, int to) const
+{
+    try{
+        edge e(from, to);
+        return this->eWeights.at(e);
+    }
+    catch(...){
+        return INFINITY;
+    }
+}
+
+double WDirGraph::getVW(int v) const
+{
+    try{
+        return this->vWeights.at(v);
+    }
+    catch(...){
+        return INFINITY;
+    }
 }
 
 int WDirGraph::type() const

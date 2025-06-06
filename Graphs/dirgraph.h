@@ -43,6 +43,8 @@ public:
     scc& Kosaraju();
     scc& Tarjan();
 
+     std::vector<int> nodeToCSS(const scc& SCCs) const;
+
     virtual int type() const override;
     virtual const QString& show() const override;
 };

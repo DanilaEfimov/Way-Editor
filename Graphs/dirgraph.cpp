@@ -15,13 +15,14 @@ int DirGraph::unvisitedIn(std::set<int>& visited)
 
 void DirGraph::markedDFS(std::stack<int> &marks, std::set<int> &visited, int start)
 {
-    visited.insert(start);
+    visited.insert(start);  // вершина помечается посещенной
     for(auto v : this->conectLists[start]){
         if(visited.find(v) == visited.end()){
             this->markedDFS(marks, visited, v);
         }
     }
-    marks.push(start);
+    marks.push(start);  // по окончании обхода помещается в стек
+    // это обеспечивает вход вершин в порядке "от листа к корню"
 }
 
 void DirGraph::reverseEdges()
@@ -140,6 +141,19 @@ std::vector<int> DirGraph::topologicalSortKahn(const scc &sccs, const std::map<i
     }
 
     return result;
+}
+
+std::vector<int> DirGraph::nodeToCSS(const scc &SCCs) const
+{
+    std::vector<int> nodeToComponent(this->V);
+    int num = 1;
+    for(auto component : SCCs){
+        for(int v : component){
+            nodeToComponent[v-1] = num;
+        }
+        num++;
+    }
+    return nodeToComponent;
 }
 
 DirGraph::DirGraph() : Graph()

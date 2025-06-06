@@ -45,6 +45,8 @@ public:
     virtual void weight(int mode);
     virtual void setVWeight(int v, double val);
     virtual void setEWeight(int from, int to, double val);
+    double getEW(int from, int to) const;
+    double getVW(int v) const;
 
     virtual int type() const override;
     virtual const QString& show() const override;
