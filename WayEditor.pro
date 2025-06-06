@@ -49,6 +49,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resources/res.qrc
 
-DISTFILES += \
-    history.txt
+DISTFILES += $$PWD/hystory.txt
 

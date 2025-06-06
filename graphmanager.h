@@ -18,6 +18,7 @@ private:
 
     static bool isDirected(Graph* G);
     static bool isTree(Graph* G);
+    static bool ifWeighted(Graph* G);
 
 public:
 
@@ -31,6 +32,12 @@ public:
     static int cast_op3(Graph* G, QString& argv);
     static int cast_op4(Graph* G, QString& argv);
     static int cast_op6(Graph* G);
+    static int cast_op7(Graph* G);
+    static int cast_op8(Graph* G, QString& argv);
+    static int cast_op9(Graph* G, QString& argv);
+    static int cast_op10(Graph* G, QString& argv);
+    static int cast_op11(Graph* G, QString& argv);
+    static int cast_op12(Graph* G, QString& argv);
 
     static int calculate(QString& argv, Graph* G);
 };

@@ -80,7 +80,10 @@ enum {
 enum operations {
     clear_text,
     add_vertex, add_edge, erase_vertex, erase_edge, degree,
-    kosaraju,
+    kosaraju, tarjan,
+    setEW, setVW,
+    mod_short_path, // modified shortest path
+    getEW, getVW,
 };
 
 enum graphTypes {
@@ -88,42 +91,45 @@ enum graphTypes {
     uweightedgraph, dweightedgraph, tree, bitree, weightedtree
 };
 
-const std::map<std::string, int> extentions {
+inline const std::map<std::string, int> extentions {
     ext_key(".mat", MAT), ext_key(".el", EL), ext_key(".vl", VL),
 };
 
-const std::map<int, std::string> r_extentions {
+inline const std::map<int, std::string> r_extentions {
     r_ext_key(MAT, ".mat"), r_ext_key(EL, ".el"), r_ext_key(VL, ".vl"),
 };
 
-const std::map<std::string, int> graphs {   // ~500 bytes
+inline const std::map<std::string, int> graphs {   // ~500 bytes
     type_key("udirgraph", udirgraph), type_key("dirgraph", dirgraph), type_key("upseudograph", upseudograph),
     type_key("dpseudograph", dpseudograph), type_key("uweightedgraph", uweightedgraph), type_key("dweightedgraph", dweightedgraph),
     type_key("tree", tree), type_key("bitree", bitree), type_key("weightedtree", weightedtree),
 };
 
-const std::map<int, std::string> r_graphs {
+inline const std::map<int, std::string> r_graphs {
     r_type_key(udirgraph, "udirgraph"), r_type_key(dirgraph, "dirgraph"), r_type_key(upseudograph, "upseudograph"),
     r_type_key(dpseudograph, "dpseudograph"), r_type_key(uweightedgraph, "uweightedgraph"), r_type_key(dweightedgraph, "dweightedgraph"),
     r_type_key(tree, "tree"), r_type_key(bitree, "bitree"), r_type_key(weightedtree, "weightedtree"),
 };
 
-const std::map<std::string, int> op_str{
+inline const std::map<std::string, int> op_str{
     op_key("clear", clear_text), op_key("addV", add_vertex), op_key("addE", add_edge),
     op_key("eraseV", erase_vertex), op_key("eraseE", erase_edge), op_key("degree", degree),
-    op_key("kosaraju",kosaraju),
+    op_key("kosaraju",kosaraju), op_key("tarjan", tarjan), op_key("setEW", setEW), op_key("setVW", setVW),
+    op_key("mod_short_path", mod_short_path), op_key("getEW", getEW), op_key("getVW", getVW)
 };
 
-const std::map<int, int> op_argc{
+inline const std::map<int, int> op_argc{
     permutation(clear_text, ONE), permutation(add_vertex, LIMITLESS), permutation(add_edge, TWO),
-    permutation(erase_vertex, TWO), permutation(erase_edge, LIMITLESS), permutation(degree, ONE),
-    permutation(kosaraju, ZERO),
+    permutation(erase_vertex, ONE), permutation(erase_edge, LIMITLESS), permutation(degree, ONE),
+    permutation(kosaraju, ZERO), permutation(tarjan, ZERO), permutation(setEW, THREE),
+    permutation(setVW, TWO), permutation(mod_short_path, TWO), permutation(getEW, TWO),
+    permutation(getVW, ONE)
 };
 
-const std::map<int, int> argc_op{
+inline const std::map<int, int> argc_op{    // useless
     permutation(ONE, clear_text), permutation(LIMITLESS, add_vertex), permutation(EVEN, add_edge),
     permutation(ONE, erase_vertex), permutation(EVEN, erase_edge), permutation(ONE, degree),
-     permutation(ZERO, kosaraju),
+    permutation(ZERO, kosaraju), permutation(ZERO, tarjan),
 };
 
 #endif // GENERAL_H

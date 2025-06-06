@@ -12,7 +12,8 @@ int GraphManager::zeroArgOp(int code, Graph *G)
         return operations::kosaraju;
     }
     switch(code){
-        case operations::kosaraju: return cast_op6(G);break;
+        case operations::kosaraju: return cast_op6(G); break;
+        case operations::tarjan: return cast_op7(G); break;
     default:
         return -1;
     }
@@ -23,6 +24,8 @@ int GraphManager::oneArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
     default:
+        case operations::erase_vertex: return cast_op3(G, argument); break;
+        case operations::getVW: return cast_op12(G, argument); break;
         return -1;
     }
     return -1;
@@ -33,6 +36,9 @@ int GraphManager::twoArgOp(int code, Graph *G, QString &argument)
     switch(code){
         case operations::add_edge: return cast_op2(G, argument); break;
         case operations::erase_edge: return cast_op4(G, argument); break;
+        case operations::setVW: return cast_op9(G, argument); break;
+        case operations::getEW: return cast_op11(G, argument); break;
+        case operations::mod_short_path: return cast_op10(G, argument); break;
     default:
         return -1;
     }
@@ -43,6 +49,7 @@ int GraphManager::threeArgOp(int code, Graph *G, QString &argument)
 {
     switch(code){
     default:
+        case operations::setEW: return cast_op8(G, argument); break;
         return -1;
     }
     return -1;
@@ -97,6 +104,24 @@ bool GraphManager::isTree(Graph *G)
     return false;
 }
 
+bool GraphManager::ifWeighted(Graph *G)
+{
+    int code = G->type();
+    switch(code){
+    case graphTypes::dirgraph:          return false; break;
+    case graphTypes::udirgraph:         return false; break;
+    case graphTypes::dpseudograph:      return false; break;
+    case graphTypes::dweightedgraph:    return true; break;
+    case graphTypes::upseudograph:      return false; break;
+    case graphTypes::weightedtree:      return true; break;
+    case graphTypes::tree:              return false; break;
+    case graphTypes::bitree:            return false; break;
+    default:
+        return false;
+    }
+    return false;
+}
+
 int GraphManager::cast_op(int code, Graph *G, QString &arguments)
 {
     int argc = Parser::argc(code);
@@ -104,13 +129,14 @@ int GraphManager::cast_op(int code, Graph *G, QString &arguments)
         case ZERO: return zeroArgOp(code, G); break;
         case ONE: return oneArgOp(code,G,arguments); break;
         case TWO: return twoArgOp(code, G, arguments); break;
-        case THREE: break;
+        case THREE: return threeArgOp(code, G, arguments); break;
         case FOUR: break;
         case LIMITLESS: return limitlessArgOp(code, G, arguments); break;
     default:
         return -1;
         break;
     }
+    GraphManager::answer = "can not to count args";
     return -1;
 }
 
@@ -222,7 +248,7 @@ int GraphManager::cast_op4(Graph *G, QString& argv)
 int GraphManager::cast_op6(Graph *G)
 {
     if(!GraphManager::isDirected(G)){
-        return operations::kosaraju;
+        return -1;
     }
     static scc components = {};
     components = reinterpret_cast<DirGraph*>(G)->Kosaraju();
@@ -236,6 +262,119 @@ int GraphManager::cast_op6(Graph *G)
     }
     answer.chop(1); // remove last "\n"
     return operations::kosaraju;
+}
+
+int GraphManager::cast_op7(Graph *G)
+{
+    if(!GraphManager::isDirected(G)){
+        return -1;
+    }
+    static scc components = {};
+    components = reinterpret_cast<DirGraph*>(G)->Tarjan();
+    GraphManager::answer = "";
+    for(auto& c : components){
+        GraphManager::answer += "component: ";
+        for(auto v : c){
+            answer += QString::fromStdString(std::to_string(v)) + " ";
+        }
+        GraphManager::answer += "\n";
+    }
+    answer.chop(1); // remove last "\n"
+    return operations::tarjan;
+}
+
+int GraphManager::cast_op8(Graph *G, QString &argv)
+{
+    // костыли со сплитом
+    QStringList args = argv.split(' ');
+    if(args.size() < 4){
+        GraphManager::answer = "invalid argument count";
+        return -1;
+    }
+    int from = args[1].toInt();
+    int to = args[2].toInt();
+    double w = args[3].toDouble();
+    WDirGraph* WG = reinterpret_cast<WDirGraph*>(G);
+    WG->setEWeight(from, to, w);
+    return operations::setEW;
+}
+
+int GraphManager::cast_op9(Graph *G, QString &argv)
+{
+    // костыли со сплитом
+    QStringList args = argv.split(' ');
+    if(args.size() < 3){
+        GraphManager::answer = "invalid argument count";
+        return -1;
+    }
+    int v = args[1].toInt();
+    double w = args[2].toDouble();
+    WDirGraph* WG = reinterpret_cast<WDirGraph*>(G);
+    WG->setVWeight(v, w);
+    return operations::setVW;
+}
+
+int GraphManager::cast_op10(Graph *G, QString &argv)
+{
+    QStringList args = argv.split(' ');
+    if(args.size() != 3){
+        GraphManager::answer = "invalid argument count";
+        return -1;
+    }
+
+    int from = args[1].toInt();
+    int to = args[2].toInt();
+    WDirGraph* WG = reinterpret_cast<WDirGraph*>(G);
+    static scc components = {};
+    components = reinterpret_cast<DirGraph*>(G)->Tarjan();
+    std::vector<int> nodeToSCC = WG->nodeToCSS(components);
+
+    double cost = WG->modifiedDejcstra(from, to, nodeToSCC);
+    GraphManager::answer = "cost: " + QString::number(cost);
+    return operations::mod_short_path;
+}
+
+int GraphManager::cast_op11(Graph *G, QString &argv)
+{
+    if(!GraphManager::ifWeighted(G)){
+        GraphManager::answer = "can not be executed for non weighted graph";
+        return -1;
+    }
+    QStringList args = argv.split(' ');
+    if(args.size() != 3){
+        GraphManager::answer = "invalid argument count";
+        return -1;
+    }
+
+    int from = args[1].toInt();
+    int to = args[2].toInt();
+    WDirGraph* WG = reinterpret_cast<WDirGraph*>(G);
+    double w = WG->getEW(from, to);
+    QString from_s = QString::number(from);
+    QString to_s = QString::number(to);
+    GraphManager::answer = "edge weight (" + from_s + ", " + to_s + " ) = " + QString::number(w);
+
+    return operations::getEW;
+}
+
+int GraphManager::cast_op12(Graph *G, QString &argv)
+{
+    if(!GraphManager::ifWeighted(G)){
+        GraphManager::answer = "can not be executed for non weighted graph";
+        return -1;
+    }
+    QStringList args = argv.split(' ');
+    if(args.size() != 2){
+        GraphManager::answer = "invalid argument count";
+        return -1;
+    }
+
+    int v = args[1].toInt();
+    WDirGraph* WG = reinterpret_cast<WDirGraph*>(G);
+    double w = WG->getVW(v);
+    GraphManager::answer = "vertex weight (" + args[1] + " ) = " + QString::number(w);
+
+    return operations::getVW;
 }
 
 int GraphManager::calculate(QString &argv, Graph *G)
